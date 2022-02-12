@@ -6,22 +6,29 @@ provider "mongodbatlas" {
 }
 
 # cluster
-# cluster
-resource "mongodbatlas_cluster" "mongo_cluster" {
-  project_id = var.atlas_project_id
-  name       = "${var.app_name}-${terraform.workspace}"
-  num_shards = 1
+resource "mongodbatlas_cluster" "mongo-cluster" {
+  project_id   = var.atlas_project_id
+  name         = "${var.app_name}-${terraform.workspace}"
+  cluster_type = "REPLICASET"
 
-  replication_factor = 3
-  //provider_backup_enabled      = true
+  replication_specs {
+    num_shards = 1
+    regions_config {
+      region_name     = "CENTRAL_US"
+      electable_nodes = 3
+      priority        = 7
+      read_only_nodes = 0
+    }
+  }
+
+  cloud_backup                 = true
   auto_scaling_disk_gb_enabled = true
-  mongo_db_major_version       = "3.6"
+  mongo_db_major_version       = "4.2"
 
-  //Provider Settings "block"
-  provider_name               = "GCP"
+  # Provider Settings "block"
   disk_size_gb                = 10
+  provider_name               = "GCP"
   provider_instance_size_name = "M10"
-  provider_region_name        = "CENTRAL_US"
 }
 
 # db user
