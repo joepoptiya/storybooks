@@ -1,6 +1,6 @@
 # Provider
 provider "google" {
-  credentials = file("terraform-sa-key.json")
+  credentials = file("terraform-sa-2-key.json")
   project     = "devops-joepop-storybooks"
   region      = "us-central1"
   zone        = "us-central1-c"
@@ -31,7 +31,7 @@ resource "google_compute_firewall" "allow_http" {
 
 # OS IMAGE  
 data "google_compute_image" "cos_image" {
-  family  = "cos-81-lts"
+  family  = "cos-85-lts"
   project = "cos-cloud"
 }
 

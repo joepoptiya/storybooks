@@ -21,9 +21,10 @@ terraform-init:
 	  terraform workspace select $(ENV) && \
 	  terraform init
 
-terraform-plan:
+TF_ACTION?=plan
+terraform-action:
 	cd terraform && \
 	  terraform workspace select $(ENV) && \
-	  terraform plan \
+	  terraform $(TF_ACTION) \
 	  -var-file="./environments/common.tfvars" \
 	  -var-file="./environments/$(ENV)/config.tfvars"
