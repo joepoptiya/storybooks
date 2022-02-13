@@ -10,9 +10,9 @@ variable "atlas_project_id" {
 variable "atlas_user_password" {
   type = string
 }
-variable "atlas_user_password_prod" {
-  type = string
-}
+//variable "atlas_user_password_prod" {
+//  type = string
+//}
 variable "mongodbatlas_private_key" {
   type = string
 }
