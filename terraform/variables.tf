@@ -10,9 +10,9 @@ variable "atlas_project_id" {
 variable "atlas_user_password" {
   type = string
 }
-variable "atlas_user_password_prod" {
-  type = string
-}
+#variable "atlas_user_password_prod" {
+#  type = string
+#}
 variable "mongodbatlas_private_key" {
   type = string
 }
@@ -26,9 +26,9 @@ variable "gcp_machine_type" {
 }
 
 ### cloudflare
-variable "cloudflare_api_token" {
-  type = string
-}
+#variable "cloudflare_api_token" {
+#  type = string
+#}
 variable "cloudflare_api_key" {
   type = string
 }
