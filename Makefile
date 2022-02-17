@@ -1,5 +1,6 @@
 PROJECT_ID=devops-joepop-storybooks
 ENV=staging
+ZONE=us-central1-a
 
 run-local:
 	docker-compose up
@@ -40,3 +41,12 @@ terraform-action:
 ###
 terraform-show-secrets:
 	echo $(_atlas_user_password), $(_cloudflare_api_key), $(_cloudflare_api_token), $(_mongodbatlas_private_key)
+
+###
+
+SSH_STRING=joe.poptiya@devops-joepop-storybooks-$(ENV)
+ssh: 
+	gcloud compute ssh \
+		--zone $(ZONE) $(PROJECT_ID)-vm-$(ENV) \
+		--tunnel-through-iap \
+		--project $(PROJECT_ID) 
