@@ -4,7 +4,7 @@ mongodbatlas_public_key = "pypctlog"
 domain                  = "joepoptiya.com"
 cloudflare_account_id   = "f1c31049072c0af344b4ea744b8001b7"
 
-mongodbatlas_private_key = "99c40862-e066-4625-8df7-30612d286e3a"
+#mongodbatlas_private_key = "99c40862-e066-4625-8df7-30612d286e3a"
 atlas_user_password      = "c33f20604db544e3b3101171^"
 atlas_user_password_prod = "7620c80d3f39365dd793e78d%"
 cloudflare_api_key       = "0d4d3eb05f896169ac198f4f184d015af8595"
