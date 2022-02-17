@@ -45,13 +45,15 @@ terraform-show-secrets:
 ###
 
 SSH_STRING=joe.poptiya@devops-joepop-storybooks-$(ENV)
+VERSION?=latest
+LOCAL_TAG=jp-storybooks-app:$(VERSION)
+REMOTE_TAG=gcr.io/$(PROJECT_ID)/$(LOCAL_TAG)
+
 ssh: 
 	gcloud compute ssh \
 		--zone $(ZONE) $(PROJECT_ID)-vm-$(ENV) \
 		--tunnel-through-iap \
 		--project $(PROJECT_ID) 
-
-###
 
 ssh-cmd: 
 	gcloud compute ssh \
@@ -59,3 +61,11 @@ ssh-cmd:
 		--tunnel-through-iap \
 		--project $(PROJECT_ID) \
 		--command="$(CMD)"
+
+build:
+	docker build -t $(LOCAL_TAG) .
+
+# Requires:  gcloud auth configure-docker 
+push:
+	docker tag $(LOCAL_TAG) $(REMOTE_TAG)
+	docker push $(REMOTE_TAG)
