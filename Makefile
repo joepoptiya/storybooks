@@ -50,3 +50,12 @@ ssh:
 		--zone $(ZONE) $(PROJECT_ID)-vm-$(ENV) \
 		--tunnel-through-iap \
 		--project $(PROJECT_ID) 
+
+###
+
+ssh-cmd: 
+	gcloud compute ssh \
+		--zone $(ZONE) $(PROJECT_ID)-vm-$(ENV) \
+		--tunnel-through-iap \
+		--project $(PROJECT_ID) \
+		--command="$(CMD)"
