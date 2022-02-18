@@ -48,6 +48,8 @@ SSH_STRING=joe.poptiya@devops-joepop-storybooks-$(ENV)
 VERSION?=latest
 LOCAL_TAG=jp-storybooks-app:$(VERSION)
 REMOTE_TAG=gcr.io/$(PROJECT_ID)/$(LOCAL_TAG)
+CONTAINER_NAME=jp-storybooks-app
+GOOGLE_CLIENT_ID=864314013955-j6395re7dpcotqjgbadk0pj8ufl90edj.apps.googleusercontent.com
 
 ssh: 
 	gcloud compute ssh \
@@ -69,3 +71,24 @@ build:
 push:
 	docker tag $(LOCAL_TAG) $(REMOTE_TAG)
 	docker push $(REMOTE_TAG)
+
+deploy:
+	$(MAKE) ssh-cmd CMD='docker-credential-gcr configure-docker'
+	@echo "pulling new container image..."
+	$(MAKE) ssh-cmd CMD='docker pull $(REMOTE_TAG)'
+	@echo "removing old container..."
+	-$(MAKE) ssh-cmd CMD='docker container stop $(CONTAINER_NAME)'
+	-$(MAKE) ssh-cmd CMD='docker container rm $(CONTAINER_NAME)'
+	@echo "starting new container..."
+	@$(MAKE) ssh-cmd CMD='\
+		docker run -d --name=$(CONTAINER_NAME) \
+			--restart=unless-stopped \
+			-p 80:3000 \
+			-e PORT=3000 \
+			-e \"MONGO_URI=mongodb+srv://devops-joepop-storybooks-$(ENV):$(call get-secret,atlas_user_password_$(ENV))@devops-joepop-storybook-$(ENV).auafs.mongodb.net/devops-joepop-storybooks?retryWrites=true&w=majority\" \
+			-e GOOGLE_CLIENT_ID=$(GOOGLE_CLIENT_ID) \
+			-e GOOGLE_CLIENT_SECRET=$(call get-secret,google_oauth_client_secret) \
+			$(REMOTE_TAG) \
+			'
+
+#			-e \"MONGO_URI=mongodb+srv://storybooks-user-$(ENV):$(call get-secret,atlas_user_password_$(ENV))@storybooks-$(ENV).kkwmy.mongodb.net/$(DB_NAME)?retryWrites=true&w=majority\" \
